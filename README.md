@@ -6,8 +6,8 @@ The primary aim of this program is to identify keywords (related to skills, both
 
 (Side aims:
 * practice my Text Mining skills
-* using version control becoming 2nd nature to me
-* learn new programming skills (GUI etc...)
+* use version control so it becomes 2nd nature to me
+* learn new, more "computer sciency" skills (GUI etc...)
 * procrastinate actually looking for jobs)
 
 Future goals:
@@ -16,3 +16,4 @@ Future goals:
 * have program run automatically on my computer once/twice a day/upon launch
 * generalise to all job searches/locations for potential users
 * add a GUI
+* sell my software for a small fortune, retire at the tender age of 27, ironically never needing to find a job ever again
