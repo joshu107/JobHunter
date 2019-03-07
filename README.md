@@ -16,4 +16,4 @@ Future goals:
 * have program run automatically on my computer once/twice a day/upon launch
 * generalise to all job searches/locations for potential users
 * add a GUI
-* sell my software for a small fortune, retire at the tender age of 27, ironically never needing to find a job ever again
+* sell my software for a small fortune, retire at the tender age of 27, ironically never needing to JobHunt ever again
