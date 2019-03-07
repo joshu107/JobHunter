@@ -26,7 +26,7 @@ with request.urlopen(homeURL) as f:
     homepage = f.read().decode('utf-8')
     
 #find total number of results
-re.search("<div id=\"searchCount\">", homepage)
+total = re.search("(?<=Sida 1 av )(\d+)(?= resultat)", homepage).group()
 
 #text to search for
 #<div id="searchCount">
