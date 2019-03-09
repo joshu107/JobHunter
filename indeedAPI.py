@@ -23,15 +23,23 @@ homeURL = homeURL+"q="+query+"&l="+loc+"&sort=date"
 
 #open 1st result page
 with request.urlopen(homeURL) as f:
-    homepage = f.read().decode('utf-8')
+    homepage = f.read().decode("utf-8")
     
 #find total number of results
-total = re.search("(?<=Sida 1 av )(\d+)(?= resultat)", homepage).group()
-
-#text to search for
-#<div id="searchCount">
-#        Sida 1 av 96 resultat</div>
-        
+totalres = int(re.search("(?<=Sida 1 av )(\d+)(?= resultat)", homepage).group())
+#NOTE: read up on ?<= "lookaround"/lookbehind regex stuff
+#total number of search 
+totalpages = totalres//10+1  
+    
 #2. extract job listing links
+links = []
+for page in range(totalpages):
+    URL = homeURL+"&start="+str(page*10)
+    with request.urlopen(URL) as f:
+        html = f.read().decode("utf-8")
+    newlinks = re.findall("\/rc\/clk\?jk=(.*)&vjs=3", html)
+    newlinks = ["https://se.indeed.com/rc/clk?jk="+ext+"&vjs=3" for ext in newlinks]
+    links = links+newlinks
+    
 
 #visit each job listing, check if new/unique (using id no?), extract job descriptions
