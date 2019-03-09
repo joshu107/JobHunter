@@ -1,7 +1,5 @@
 # JobHunter
 
-Code for helping me in my search for Data Scientist jobs.
-
 The primary aim of this program is to identify keywords (related to skills, both personal and technical) most used by recruiters in Data Science job listings using basic Natural Language Processing methods. The job listings will initially only be extracted from Indeed.com.
 
 (Side aims:
