@@ -32,14 +32,22 @@ totalres = int(re.search("(?<=Sida 1 av )(\d+)(?= resultat)", homepage).group())
 totalpages = totalres//10+1  
     
 #2. extract job listing links
-links = []
+links = {}
 for page in range(totalpages):
     URL = homeURL+"&start="+str(page*10)
     with request.urlopen(URL) as f:
         html = f.read().decode("utf-8")
-    newlinks = re.findall("\/rc\/clk\?jk=(.*)&vjs=3", html)
-    newlinks = ["https://se.indeed.com/rc/clk?jk="+ext+"&vjs=3" for ext in newlinks]
-    links = links+newlinks
+    html = html.replace("\n", " ")
+    listings = re.findall("jobsearch-SerpJobCard.*?\/rc\/clk\?jk.*?&vjs=3", html)
+    for job in listings:
+        #jobid = re.search("(?<=id=\")(.*)(?=\" data-jk=)", job).group() #(LOOKAROUND PRACTISE)
+        jobid = re.findall("id=\"(.*)\" data-jk=", job)[0]
+        link = re.findall("\/rc\/clk\?jk=(.*)&vjs=3", job)[0]
+        link = "https://se.indeed.com/rc/clk?jk="+link+"&vjs=3"
+        links[jobid] = link
     
-
+#use of dictionary omits 17 similar results that Indeed omits really 96 results->79
+#PROBLEM: was planning on stopping search as soon as a job id is recognised, ie. already scraped job ad but the re-posting 
+        #by companies means that i cant do this, i need to search through all each time
+        #SOLUTION: use date posted? -> eg regex <span class="date">2 dagar sedan</span>
 #visit each job listing, check if new/unique (using id no?), extract job descriptions
