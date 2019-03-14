@@ -45,7 +45,7 @@ if "links.json" in os.listdir(homedir+"Data"):
 else:
     links = {} #initial run
 
-newlinks = []    
+newlinks = {}    
 for page in range(totalpages):
     URL = homeURL+"&start="+str(page*10)
     with request.urlopen(URL) as f:
@@ -54,17 +54,17 @@ for page in range(totalpages):
     listings = re.findall("jobsearch-SerpJobCard.*?\/rc\/clk\?jk.*?&vjs=3", html)
     for job in listings:
         #jobid = re.search("(?<=id=\")(.*)(?=\" data-jk=)", job).group() #(LOOKAROUND PRACTISE)
-        jobid = re.findall("id=\"(.*)\" data-jk=", job)[0]
+        jobid = re.findall("id=\"(.*?)\" data-jk=", job)[0]
         if jobid not in set(links.keys()):
-            link = re.findall("\/rc\/clk\?jk=(.*)&vjs=3", job)[0]
+            link = re.findall("\/rc\/clk\?jk=(.*?)&vjs=3", job)[0]
             link = "https://se.indeed.com/rc/clk?jk="+link+"&vjs=3"
-            newlinks = newlinks+[link]
             tempdict = {jobid:link}
+            newlinks.update(tempdict)
             links.update(tempdict) #potential issue:keeps oldest version of ad
         #new method assumes we did all our analysis on previously found links!
         #so be careful in development phase (could just erase links.json until fully ready)
 with open(homedir+"Data/links.json", "w") as f:
-    json.dump(links, f)
+    json.dump(links, f) #this is just to keep track of job i have already extracted descriptions from
 
 #use of dictionary (key uniqueness) omits 17 similar results that Indeed omits really 96 results->79
 #FUTURE PROBLEM: was planning on stopping search as soon as a job id is recognised, ie. already scraped job ad but the re-posting 
@@ -75,9 +75,9 @@ with open(homedir+"Data/links.json", "w") as f:
 #2. visit each job listing, extract job descriptions
 ads = {}
 start = time.time()
-for key in links:
+for key in newlinks:
     time.sleep(8)
-    url = links[key]
+    url = newlinks[key]
     with request.urlopen(url) as f:
         html = f.read().decode("utf-8")
         html = html.replace("\n", " ")
