@@ -76,7 +76,7 @@ with open(homedir+"Data/links.json", "w") as f:
 ads = {}
 start = time.time()
 for key in newlinks:
-    time.sleep(8)
+    time.sleep(10)
     url = newlinks[key]
     with request.urlopen(url) as f:
         html = f.read().decode("utf-8")
