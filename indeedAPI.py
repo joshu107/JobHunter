@@ -73,7 +73,13 @@ with open(homedir+"Data/links.json", "w") as f:
         # compare with current date and date of last run (will have to be saved)
 
 #2. visit each job listing, extract job descriptions
-ads = {}
+if "descriptions.json" in os.listdir(homedir+"Data"):
+    with open(homedir+"Data/links.json", "r") as f:
+        ads = json.load(f)
+else:
+    ads = {} #initial run
+    
+newads = {}
 start = time.time()
 for key in newlinks:
     time.sleep(10)
@@ -84,12 +90,14 @@ for key in newlinks:
     #isolate description
     desc = re.findall("<div class=\"jobsearch-JobComponent-description icl-u-xs-mt--md\">(.*?)<div class", html)[0]
     desc = BeautifulSoup(desc, 'lxml').text   
-    ads[key] = desc
+    newads[key] = desc
 print(time.time()-start) #1 sec per request roughly (8second lapse between requests)
+
 
 #regex if want to save job title and company name respectively
 #<h3 class="icl-u-xs-mb--xs icl-u-xs-mt--none jobsearch-JobInfoHeader-title">Machine Learning Engineer</h3>
 #<div class="icl-u-lg-mr--sm icl-u-xs-mr--xs">Darwin Recruitment</div>
+ads.update(newads)
 
 with open(homedir+"Data/descriptions.json", "w") as f:
     json.dump(ads, f)
