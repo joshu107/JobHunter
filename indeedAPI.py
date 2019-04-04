@@ -47,6 +47,7 @@ else:
 
 newlinks = {}    
 for page in range(totalpages):
+    time.sleep(10)
     URL = homeURL+"&start="+str(page*10)
     with request.urlopen(URL) as f:
         html = f.read().decode("utf-8")
@@ -54,7 +55,7 @@ for page in range(totalpages):
     listings = re.findall("jobsearch-SerpJobCard.*?\/rc\/clk\?jk.*?&vjs=3", html)
     for job in listings:
         #jobid = re.search("(?<=id=\")(.*)(?=\" data-jk=)", job).group() #(LOOKAROUND PRACTISE)
-        jobid = re.findall("id=\"(.*?)\" data-jk=", job)[0]
+        jobid = re.findall("id=\"(.*?)\".*?data-jk=", job)[0]
         if jobid not in set(links.keys()):
             link = re.findall("\/rc\/clk\?jk=(.*?)&vjs=3", job)[0]
             link = "https://se.indeed.com/rc/clk?jk="+link+"&vjs=3"
